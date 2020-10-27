@@ -12,16 +12,15 @@ void mkdir(const char *pPath) {
 
 int main(int argc, char *argv[]) {
     ProtonClass ProtonObject;
-    ProtonObject.steam = "STEAM_COMPAT_DATA_PATH";
     ProtonObject.common = "PC_COMMON";
     std::cout << "Proton Caller by Avery Murray version: " << VERSION << "\n";
-
-    // check for compat data path
-    if (getenv(ProtonObject.steam) != nullptr) {
-        std::cout<< ProtonObject.steam << " located at: " << getenv(ProtonObject.steam) << "\n";
-    } else {mkdir(ProtonObject.steam);}
-
     Args(ProtonObject, argc, argv);
+    // check for compat data path
+    if (getenv(STEAM) != nullptr) {
+        std::cout<< STEAM << " located at: " << getenv(STEAM) << "\n";
+    } else {
+        std::cout << STEAM << "does not exist.\n";
+    }
     setEnvironment(ProtonObject);
     ProtonObject.initPC();
     return 0;

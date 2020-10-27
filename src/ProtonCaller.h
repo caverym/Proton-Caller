@@ -12,13 +12,13 @@
 #include <unistd.h>
 
 #define VERSION "1.3.0"
+#define STEAM "STEAM_COMPAT_DATA_PATH"
 
 class ProtonClass {
 public:
     std::string _argv1;
     std::string _argv2;
     std::string _argv3;
-    const char *steam{};
     const char *common{};
     std::string proton;
     std::string program;

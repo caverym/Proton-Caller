@@ -13,11 +13,11 @@ void Args(ProtonClass &ProtonObject, int argc, char *argv[]) {
         std::cout << help_msg;
         exit(EXIT_FAILURE);
     }
-
     if (argv[1] != nullptr) {
         ProtonObject._argv1 = argv[1];
-    } else {exit(EXIT_FAILURE);}
-
+    } else {
+        exit(EXIT_FAILURE);
+    }
     if (ProtonObject._argv1 == "-h") {
         std::cout << help_msg;
         std::cout << "Compiled at: " << __TIMESTAMP__ << std::endl;
