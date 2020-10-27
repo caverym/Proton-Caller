@@ -42,6 +42,7 @@ void Args(ProtonClass &ProtonObject, int argc, char *argv[]) {
     }
 }
 
+
 // setup the Proton environment
 void setEnvironment(ProtonClass &ProtonObject) {
     // check if in custom mode
