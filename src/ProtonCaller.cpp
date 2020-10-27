@@ -3,7 +3,6 @@
 //
 #include "ProtonCaller.h"
 
-
 // this function is a mess and I should eventually change it
 
 void Args(ProtonClass &ProtonObject, int argc, char *argv[]) {
@@ -21,6 +20,7 @@ void Args(ProtonClass &ProtonObject, int argc, char *argv[]) {
 
     if (ProtonObject._argv1 == "-h") {
         std::cout << help_msg;
+        std::cout << "Compiled at: " << __TIMESTAMP__ << std::endl;
         exit (EXIT_SUCCESS);
     } else if (ProtonObject._argv1 == "-c") {
         ProtonObject.custom = true;

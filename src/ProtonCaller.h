@@ -4,11 +4,14 @@
 
 #ifndef PROTON_CALLER_PROTONCALLER_H
 #define PROTON_CALLER_PROTONCALLER_H
+
 #include <iostream>
 #include <string>
 #include <cstring>
 #include <filesystem>
 #include <unistd.h>
+
+#define VERSION "1.3.0"
 
 class ProtonClass {
 public:

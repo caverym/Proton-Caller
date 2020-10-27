@@ -14,8 +14,7 @@ int main(int argc, char *argv[]) {
     ProtonClass ProtonObject;
     ProtonObject.steam = "STEAM_COMPAT_DATA_PATH";
     ProtonObject.common = "PC_COMMON";
-    std::string version = "1.3.0b";
-    std::cout << "Proton Caller by Avery Murray version: " << version << "\n";
+    std::cout << "Proton Caller by Avery Murray version: " << VERSION << "\n";
 
     // check for compat data path
     if (getenv(ProtonObject.steam) != nullptr) {

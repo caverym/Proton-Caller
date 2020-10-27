@@ -23,7 +23,6 @@ proton-call 5 SpaceEngine.exe
 ```
 proton-call -c "/home/avery/.steam/steam/steamapps/common/Proton 5.13" SpaceEngine.exe
 ```
-It must be in double quotes do to a known bug. It is being worked on.
 ## Install:
 
 To install `proton-call`
@@ -31,14 +30,14 @@ To install `proton-call`
 yay -S proton-caller
  ``` 
 
-or:
+or: (with makepkg)
 
 ```
 git clone https://aur.archlinux.org/proton-caller.git
 cd proton-caller
 makepkg -si
 ```
-
+or:
 ```
 git clone https://github.com/caverym/Proton-Caller.git
 cd Proton-Caller
