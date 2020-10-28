@@ -1,5 +1,5 @@
 build:
-	g++ -o proton-call src/main.cpp src/ProtonCaller.cpp -std=c++17
+	g++ -o proton-call src/ProtonCaller.cpp src/ProtonArguments.cpp -std=c++17
 
 install:
 	cp ./proton-call usr/bin/
