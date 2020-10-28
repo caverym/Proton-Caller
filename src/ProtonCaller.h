@@ -11,7 +11,7 @@
 #include <filesystem>
 #include <unistd.h>
 
-#define VERSION "1.4.0"
+#define VERSION "1.3.0"
 #define STEAM "STEAM_COMPAT_DATA_PATH"
 
 class ProtonCaller {
