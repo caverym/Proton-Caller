@@ -7,12 +7,6 @@ pub(crate) struct Proton {
     conf: Config,
 }
 
-fn push_proton(string: &mut String, version: &str) {
-    string.push_str("/Proton ");
-    string.push_str(version);
-    string.push_str("/proton");
-}
-
 impl Proton {
     pub fn init(args: &[String], custom: bool) -> Result<Proton, &str> {
         if custom {
@@ -28,15 +22,14 @@ impl Proton {
         let config: Config;
         let version: String = args[1].to_string();
         let program: String = args[2].to_string();
-        let mut path: String;
+        let path: String;
 
         match Config::new() {
             Ok(val) => config = val,
             Err(e) => return Err(e),
         }
 
-        path = config.common.to_string();
-        push_proton(&mut path, &version);
+        path = format!("{}/Proton {}/proton", config.common.to_string(), version);
 
         if !Proton::check(&[&path, &args[2]]) {
             return Err("error: invalid Proton or executable");
