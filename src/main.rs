@@ -47,10 +47,10 @@ fn help() {
     println!("   or: basename OPTION PATH PROGRAM");
     println!("Execute PROGRAM with Proton VERSION");
     println!("If specified, run proton PATH\n");
-    println!("  -c, --custom PATH   use proton from PATH");
+    println!("  -c, --custom PATH       use proton from PATH");
     println!("  -h, --help              display this help message");
+    println!("  -s, --setup             display setup information");
     println!("  -v, --version           display version information");
-    println!("  -s --setup             display setup information");
 }
 
 fn pc_version() {
