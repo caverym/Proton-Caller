@@ -18,6 +18,7 @@ impl Proton {
         if args_len < 2 {
             return Err("error: not enough arguments");
         }
+        
         let config: config::Config;
         let version: String = args[1].to_string();
         let program: String;
