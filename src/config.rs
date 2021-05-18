@@ -1,6 +1,6 @@
 use std::{env, fs, io::{Error, ErrorKind}, path::Path};
 
-#[derive(serde_derive::Deserialize)]
+#[derive(Debug, serde_derive::Deserialize)]
 pub struct Config {
     pub data: String,
     pub common: String,

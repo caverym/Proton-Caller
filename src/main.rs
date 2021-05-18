@@ -5,7 +5,12 @@ mod proton;
 use config::Config;
 use proton::Proton;
 
-use std::process::exit;
+use std::io::{Result as IoR, ErrorKind};
+use std::{ffi::OsString, process::exit};
+
+use crate::proton::errorhere;
+
+const PROTON_LATEST: &str = "6";
 
 #[macro_export]
 macro_rules! eprinter {
@@ -14,55 +19,58 @@ macro_rules! eprinter {
     };
 }
 
-fn main() {
-    let args: Vec<String> = std::env::args().collect();
-    let args_count: usize = args.len();
-    let program: &str = args[0].split('/').last().get_or_insert(&args[0]);
+#[derive(Debug)]
+pub struct AppArgs {
+    proton: Option<String>,
+    custom: Option<String>,
+    exe: String,
+    rest: Vec<OsString>,
+    full_args: Vec<String>,
+    full_args_count: usize,
+}
 
-    if args_count == 1 {
-        eprintln!("proton-call: missing arguments");
-        eprintln!("Try 'proton-call --help' for more information");
-        exit(1);
+fn main() -> IoR<()> {
+
+    let args = match parse_args() {
+        Ok(a) => a,
+        Err(e) => errorhere(ErrorKind::Other, e)?,
+    };
+
+    let config: Config = Config::new()?;
+
+    println!("{:#?}", args);
+
+    let proton = Proton::new(config, args)?;
+
+    println!("{:#?}", proton);
+
+    proton.check()?;
+    proton.execute()?;
+
+    Ok(())
+}
+
+fn parse_args() -> Result<AppArgs, pico_args::Error> {
+    let full_args: Vec<String> = std::env::args().collect();
+    let full_args_count: usize = full_args.len();
+
+    let mut pargs = pico_args::Arguments::from_env();
+
+    if pargs.contains(["-h", "--help"]) {
+        help();
+        exit(0);
     }
 
-    let custom = match args[1].as_str() {
-        "--help" | "-h" => {
-            help();
-            return;
-        }
-        "--setup" | "-s" => {
-            setup();
-            return;
-        }
-        "--version" | "-v" => {
-            pc_version();
-            return;
-        }
-
-        "--custom" | "-c" => true,
-
-        _ => false,
+    let args = AppArgs {
+        proton: pargs.opt_value_from_str(["-p", "--proton"]).unwrap_or(Some(PROTON_LATEST.to_string())),
+        custom: pargs.opt_value_from_str(["-c", "--custom"])?,
+        exe: pargs.value_from_str(["-e", "--exe"])?,
+        rest: pargs.finish(),
+        full_args,
+        full_args_count,
     };
 
-    let config = match Config::new() {
-        Ok(c) => c,
-        Err(e) => {
-            eprinter!(program, e);
-            exit(78)
-        }
-    };
-
-    let proton = match Proton::new(config, custom, &args, args_count) {
-        Ok(p) => p,
-        Err(e) => {
-            eprinter!(program, e);
-            exit(70);
-        }
-    };
-
-    if let Err(e) = proton.execute() {
-        eprinter!(program, e);
-    }
+    Ok(args)
 }
 
 // messaging
