@@ -1,10 +1,13 @@
 use crate::config::Config;
-use std::{ffi::OsString, io::{Error, ErrorKind}, path::Path};
+use std::{
+    ffi::OsString,
+    io::{Error, ErrorKind},
+     path::Path,
+};
 
 pub fn errorhere<R, T: ToString>(ek: ErrorKind, info: T) -> Result<R, Error> {
     Err(Error::new(ek, info.to_string()))
 }
-
 
 #[derive(Debug)]
 pub struct Proton {

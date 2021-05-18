@@ -19,7 +19,7 @@ dependencies = [
 
 [[package]]
 name = "proton-call"
-version = "2.2.4"
+version = "2.3.0"
 dependencies = [
  "pico-args",
  "serde",

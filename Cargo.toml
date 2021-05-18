@@ -1,6 +1,6 @@
 [package]
 name = "proton-call"
-version = "2.2.4"
+version = "2.3.0"
 authors = ["cavery <averylapine@gmail.com>"]
 edition = "2018"
 

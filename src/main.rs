@@ -57,7 +57,13 @@ fn parse_args() -> Result<AppArgs, pico_args::Error> {
     let mut pargs = pico_args::Arguments::from_env();
 
     if pargs.contains(["-h", "--help"]) {
-        help();
+        println!("{}", HELP);
+        exit(0);
+    } else if pargs.contains(["-v", "--version"]) {
+        pc_version();
+        exit(0);
+    } else if pargs.contains(["-s", "--setup"]) {
+        setup();
         exit(0);
     }
 
@@ -73,23 +79,11 @@ fn parse_args() -> Result<AppArgs, pico_args::Error> {
     Ok(args)
 }
 
-// messaging
-fn help() {
-    println!("Usage: proton-call VERSION PROGRAM");
-    println!("   or: basename OPTION PATH PROGRAM");
-    println!("Execute PROGRAM with Proton VERSION");
-    println!("If specified, run proton PATH\n");
-    println!("  -c, --custom PATH       use proton from PATH");
-    println!("  -h, --help              display this help message");
-    println!("  -s, --setup             display setup information");
-    println!("  -v, --version           display version information");
-}
-
 fn pc_version() {
-    println!("  proton-caller 2.2.4 Copyright (C) 2021  Avery Murray");
+    println!("\t{} {} Copyright (C) 2021 {}", CRATE, VERSION, AUTHOR);
     println!("This program comes with ABSOLUTELY NO WARRANTY.");
     println!("This is free software, and you are welcome to redistribute it");
-    println!("under certain conditions.\n")
+    println!("under certain conditions.")
 }
 
 fn setup() {
@@ -101,3 +95,19 @@ fn setup() {
     println!("`common` is a directory pointing to steam's common directory, where Proton");
     println!("and games are installed");
 }
+
+const VERSION: &str = env!("CARGO_PKG_VERSION");
+const AUTHOR: &str = env!("CARGO_PKG_AUTHORS");
+const CRATE: &str = env!("CARGO_PKG_NAME");
+
+const HELP: &str = "\
+USAGE: proton-call [-p, -e, -c, -h, -s, -v]
+
+FLAGS:
+\t-c, --custom [PATH]\tUse Proton from PATH
+\t-e, --exe [EXECUTABLE]\tpath to Windows executable to use execute
+\t-p, --proton [VERSION]\tuse Proton VERSION, uses latest if not used
+\t-h, --help\t\tdisplay this help information
+\t-s, --setup\t\tdisplay setup information
+\t-v, --version\t\tdisplay version information
+";
