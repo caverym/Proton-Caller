@@ -201,8 +201,17 @@ impl Args {
     /// Parses the arguments.
     pub fn args() -> DualRes<Args, pico_args::Error> {
         use pico_args::Arguments;
+        use std::process::exit;
 
         let mut pargs: Arguments = Arguments::from_env();
+
+        if pargs.contains(["-h", "--help"]) {
+            println!("{}", HELP);
+            exit(0);
+        } else if pargs.contains(["-V", "--version"]) {
+            version();
+            exit(0);
+        }
 
         let args: Args = Args {
             proton: pargs.opt_value_from_str(["-p", "--proton"])?,
@@ -268,3 +277,32 @@ macro_rules! vprintln {
         if $v { println!($fmt) }
     }
 }
+
+fn version() {
+    println!("Proton Caller (proton-call) {} Copyright (C) 2021 {}",
+             env!("CARGO_PKG_VERSION"), env!("CARGO_PKG_AUTHORS"));
+}
+
+static HELP: &str = "\
+Usage: proton-call [OPTIONS]... EXE [EXTRA]...
+
+Options:
+    -c, --custom [PATH]     Path to a directory containing Proton to use
+    -h, --help              View this help message
+    -l, --log               Pass PROTON_LOG variable to Proton
+    -p, --proton [VERSION]  Use Proton VERSION from `common`
+    -r, --run EXE           Run EXE in proton
+    -v, --verbose           Run in verbose mode
+    -V, --version           View version information
+
+Config:
+    The config file should be located at '$XDG_CONFIG_HOME/proton.conf' or '$HOME/.config/proton.conf'
+
+    The config requires two values.
+    Data: a location to any directory to contain Proton's runtime files.
+    Common: the directory where your proton versions are stored, usually Steams' common directory.
+
+    Example:
+        data = \"/home/avery/Documents/Proton/env/\"
+        common = \"/home/avery/.steam/steam/steamapps/common/\"
+";
