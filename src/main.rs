@@ -102,15 +102,19 @@ impl Proton {
 
         let log = if self.args.log { "1" } else { "0" };
 
-        vprintln!(self.args.verbose,
-        "Running:
+        vprintln!(
+            self.args.verbose,
+            "Running:
         Command:    '{}',
         Exe:        '{}' {:?},
         Environment:    PROTON_LOG={}, STEAM_COMPAT_DATA_PATH={}
         ",
-        self.proton,
-        self.executable, self.passed_args,
-        log, self.config.data);
+            self.proton,
+            self.executable,
+            self.passed_args,
+            log,
+            self.config.data
+        );
 
         println!("\n________Proton________");
 
@@ -264,4 +268,3 @@ macro_rules! vprintln {
         if $v { println!($fmt) }
     }
 }
-
