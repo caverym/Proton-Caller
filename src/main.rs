@@ -1,3 +1,34 @@
+#![warn(missing_docs)]
+#![warn(clippy::all, clippy::pedantic)]
+
+/*!
+# Proton Caller
+
+Run any Windows program through [Valve's Proton](https://github.com/ValveSoftware/Proton).
+
+## Usage:
+
+Defaults to the latest version of Proton.
+```
+proton-call -r foo.exe
+```
+
+Defaults to the latest verson of Proton, all extra arguments passed to the executable.
+```
+proton-call -r foo.exe --flags --for program
+```
+
+Uses specified version of Proton, any extra arguments will be passed to the executable.
+```
+proton-call -p 5.13 -r foor.exe
+```
+
+Uses custom version of Proton, give the past to directory, not the Proton executable itself.
+```
+proton-call -c '/path/to/Proton version' -r foo.exe
+```
+*/
+
 use std::ffi::OsString;
 use std::io::{Error, ErrorKind, Read, Result};
 use std::result::Result as DualRes;
@@ -30,22 +61,26 @@ impl Proton {
     }
 
     fn set_proton(&mut self) {
-        let proton: String = self
-            .args
-            .proton
-            .to_owned()
-            .unwrap_or(PROTON_LATEST.to_string());
-        self.proton = format!("{}/Proton {}/proton", self.config.common, proton);
+        if let Some(c) = &self.args.custom {
+            self.proton = format!("{}/proton", c);
+        } else {
+            let proton: String = self
+                .args
+                .proton
+                .clone()
+                .unwrap_or_else(|| PROTON_LATEST.to_string());
+            self.proton = format!("{}/Proton {}/proton", self.config.common, proton);
+        }
         vprintln!(self.args.verbose, "setting proton: {}", self.proton)
     }
 
     fn set_executable(&mut self) {
-        self.executable = self.args.program.to_owned();
+        self.executable = self.args.program.clone();
         vprintln!(self.args.verbose, "setting executable: {}", self.executable);
     }
 
     fn pass_arguments(&mut self) {
-        self.passed_args = self.args.extra.to_owned();
+        self.passed_args = self.args.extra.clone();
     }
 
     pub fn check(&self) -> Result<()> {
@@ -65,10 +100,7 @@ impl Proton {
     pub fn run(self) -> Result<()> {
         use std::process::{Child, Command};
 
-        let log = match self.args.log {
-            true => "1".to_string(),
-            false => "0".to_string(),
-        };
+        let log = if self.args.log { "1" } else { "0" };
 
         vprintln!(self.args.verbose,
         "Running:
@@ -154,6 +186,7 @@ impl Config {
 /// Stores and parses arguments for controlling PC.
 struct Args {
     proton: Option<String>,
+    custom: Option<String>,
     program: String,
     log: bool,
     verbose: bool,
@@ -169,6 +202,7 @@ impl Args {
 
         let args: Args = Args {
             proton: pargs.opt_value_from_str(["-p", "--proton"])?,
+            custom: pargs.opt_value_from_str(["-c", "--custom"])?,
             program: pargs.value_from_str(["-r", "--run"])?,
             log: pargs.contains(["-l", "--log"]),
             verbose: pargs.contains(["-v", "--verbose"]),
@@ -207,6 +241,7 @@ fn proton_caller() -> Result<()> {
     Ok(())
 }
 
+/// Macro to run the `error_here` function.
 #[macro_export]
 macro_rules! error {
     ($ek:expr, $fmt:expr) => { error_here($ek, $fmt) };
@@ -214,10 +249,11 @@ macro_rules! error {
 }
 
 /// Quick and dirt way to cause an error in a function.
-pub fn error_here<R, T: ToString>(ek: ErrorKind, info: T) -> Result<R> {
+fn error_here<R, T: ToString>(ek: ErrorKind, info: T) -> Result<R> {
     Err(Error::new(ek, info.to_string()))
 }
 
+/// Verbose println macro, checks `$v` to be true, if is, prints the text.
 #[macro_export]
 macro_rules! vprintln {
     ($v:expr, $fmt:literal, $($arg:expr),*) => {
@@ -228,3 +264,4 @@ macro_rules! vprintln {
         if $v { println!($fmt) }
     }
 }
+

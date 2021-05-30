@@ -12,29 +12,28 @@ https://aur.archlinux.org/packages/proton-caller/
 ## Problem Reporting:
 Please create an issue on the [Github](https://github.com/caverym/Proton-Caller) page which lists: system, kernel version, game, shell, and if it is or isn't a Steam game – provide how you had installed it and where it is installed. Additionally provide screenshots of the shell. Try many methods to get it to work and describe what you did in your issue.
 
-### Warning: if you're not using a release build, use a release build.
-
+### Warning: if you are not using a release, use a release.
 
 ## Usage:
 
+Defaults to the latest version of Proton.
 ```
-Usage: proton-call VERSION PROGRAM
-   or: basename OPTION PATH PROGRAM
-Execute PROGRAM with Proton VERSION
-If specified, run proton PATH
-
-  -c, --custom PATH       use proton from PATH
-  -h, --help              display this help message
-  -s, --setup             display setup information
-  -v, --version           display version information
+proton-call -r foo.exe
 ```
 
+Defaults to the latest verson of Proton, all extra arguments passed to the executable.
 ```
-proton-call 5.13 SpaceEngine.exe
+proton-call -r foo.exe --flags --for program
 ```
 
+Uses specified version of Proton, any extra arguments will be passed to the executable.
 ```
-proton-call -c ./Proton\ 5.13/ SpaceEngine.exe
+proton-call -p 5.13 -r foor.exe
+```
+
+Uses custom version of Proton, give the past to directory, not the Proton executable itself.
+```
+proton-call -c '/path/to/Proton version' -r foo.exe
 ```
 
 ## Config:
@@ -59,7 +58,8 @@ git clone https://aur.archlinux.org/proton-caller.git
 cd proton-caller
 makepkg -si
 ```
-or: (Requires Rust)
+
+or: (Requires Rust to build)
 ```
 git clone https://github.com/caverym/Proton-Caller.git
 cd Proton-Caller
