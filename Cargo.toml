@@ -1,7 +1,12 @@
 [package]
 name = "proton-call"
-version = "2.2.4"
-authors = ["cavery <averylapine@gmail.com>"]
+version = "2.3.0"
+license = "GPL3"
+authors = ["Avery Murray <averylapine@gmail.com>"]
+description = "Run any Windows program through Valve's Proton"
+repository = "https://github.com/caverym/proton-caller"
+readme = "README.md"
+keywords = ["wine", "valve", "steam", "proton"]
 edition = "2018"
 
 [profile.release]
@@ -9,10 +14,9 @@ opt-level = 'z'
 lto = true
 codegen-units = 1
 
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 toml = "0.5.8"
-serde = "1.0.123"
-serde_derive = "1.0.123"
+serde = "1.0.126"
+serde_derive = "1.0.126"
+pico-args = "0.4.1"
+lliw = "0.1.2"
